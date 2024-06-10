@@ -139,7 +139,7 @@
     </div>
     <!-- Tambah Data Modal -->
     <div class="modal fade" id="tambahDataModal" tabindex="-1" aria-labelledby="tambahDataModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="tambahDataModalLabel">Tambah Kriteria dan Bobot</h5>
@@ -147,56 +147,41 @@
                 </div>
                 <div class="modal-body">
                 <!-- Isi Form Tambah Data -->
-                    <form class="modal-body mx-3" method="POST" action="{{ route('store-kriteria') }}">
-                        @csrf
-                        <div class="md-form">
-                            <label for="kriteria">Kriteria</label>
-                            <input class="form-control" value="{{ old('kriteria') }}" type="text" name="kriteria" id="kriteria" required>
-                            @error('kriteria')
-                            <div>
-                                {{ $message }}
-                            </div>
-                            @enderror
+                <form class="modal-body mx-3" method="POST" action="{{route('store-biji-kopi')}}">
+                    @csrf
+                    <div class="md-form">
+                        <label for="nama">Nama</label>
+                        <input class="form-control" value="{{ old('nama') }}" type="text" name="nama" id="nama">
+                        @error('nama')
+                        <div>
+                            {{ $message }}
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="md-form">
-                                    <label for="kriteria">Tipe</label>
-                                    <div class="custom-control custom-radio">
-                                        <input class="custom-control-input" type="radio" id="cost" name="tipe" value="cost" checked>
-                                        <label class="custom-control-label" for="cost">Cost</label>
-                                    </div>
+                        @enderror
+                    </div>
+                    <div class="md-form">
+                        <label for="harga">Harga</label>
+                        <input class="form-control" value="{{ old('harga') }}" type="number" name="harga" id="harga">
+                        @error('harga')
+                        <div>
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    @foreach ($kriterias as $kriteria)
+                        <h4 for=""> <b> {{ $kriteria->kriteria }} </b></h4>
+                            @foreach ($kriteria->subKriteria as $item)
+                                <div class="custom-control custom-radio mb-1">
+                                    <input class="custom-control-input" type="radio" id="{{ $item->id }}" name="{{ $kriteria->id }}" value="{{ $item->id }}" >
+                                    <label class="custom-control-label" for="{{ $item->id }}">{{ $item->sub_kriteria }}</label>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="md-form">
-                                    <label for="kriteria" class="invisible">Tipe</label>
-                                    <div class="custom-control custom-radio">
-                                        <input class="custom-control-input" type="radio" id="benefit" name="tipe" value="benefit">
-                                        <label class="custom-control-label" for="benefit">Benefit</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="md-form">
-                            <label for="bobot">Bobot</label>
-                            <input class="form-control" value="{{ old('bobot') }}" type="number" name="bobot" id="bobot" required>
-                            @error('bobot')
-                            <div>
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
-                        <div id="dynamic-form">
-                            <label for="">Sub Kriteria</label>
-                        </div>
-                        <button class="btn btn-sm btn-success" type="button" id="add-kriteria">
-                            Tambah Kriteria
-                        </button>
-                        <div class="modal-footer d-flex justify-content-center">
-                            <button class="btn btn-secondary" type="submit">Tambah Data Kriteria</button>
-                        </div>
-                    </form>
+                            @endforeach
+                            <br>
+                    @endforeach
+    
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button class="btn btn-brown" type="submit">Tambah Data Biji Kopi</button>
+                    </div>
+                </form>
                 </div>
             </div>
         </div>

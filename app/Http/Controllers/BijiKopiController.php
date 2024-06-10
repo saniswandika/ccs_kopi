@@ -21,7 +21,7 @@ class BijiKopiController extends Controller
         $bijiKopis = BijiKopi::get();
         return view('bijikopi.index', [
             'bijikopis' => $bijiKopis,
-            // 'kriterias' => $kriterias
+            'kriterias' => $kriterias
         ]);
     }
 
