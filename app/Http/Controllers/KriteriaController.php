@@ -58,15 +58,19 @@ class KriteriaController extends Controller
         return back();
     }
 
+
     public function edit(Kriteria $kriteria, Request $request)
     {
+        // Mengambil semua sub kriteria terkait dengan kriteria yang sedang diedit
         $subKriteria = $kriteria->subKriteria()->get();
-        return view('editkriteria', [
+    
+        return view('kriteria.edit', [
             'kriteria' => $kriteria,
-            'sub_kriteria' => $subKriteria
+            'sub_kriteria' => $subKriteria // Menggunakan 'subKriterias' untuk mempertahankan konsistensi
         ]);
     }
-    public function storeEdit(Kriteria $kriteria, Request $request)
+    
+    public function update(Kriteria $kriteria, Request $request)
     {
         $this->validate($request, [
             'kriteria' => 'required|max:255',

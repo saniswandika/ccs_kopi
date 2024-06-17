@@ -2,6 +2,10 @@
 
 @section('content')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+<!-- Masukkan ini di bagian head layout Anda -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+
     <style>
         .action{
             width: 49.45px;
@@ -64,136 +68,107 @@
             <div class="col-md-12">
                 <div class="card card-profile">
                     <div class="card-header pb-0 d-flex justify-content-between">
-                        <div>
-                            <h6>Data Biji Kopi</h6>
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahDataModal">Tambah Kriteria dan Bobot</button>
-                        </div>
-                    </div>                    
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="table-responsive p-0">
-                   
-                                    <table class="table align-items-center mb-0 text-center"  id="bijikopi">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    No</th>
-                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                    Nama Biji Kopi</th>
-                                                <th
-                                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Harga</th>
-
-                                                <th class="text-secondary action">action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach ($bijikopis as $bijikopi)
-        
-                                            <tr>
-                                                <td class="text-center">
-                                                    {{-- {{ $loop->index + 1 }} --}}
-                                                    <div class="px-2 py-1">
-                                                        {{-- <div>
-                                                            <img src="/img/team-4.jpg" class="avatar avatar-sm me-3" alt="user6">
-                                                        </div> --}}
-                                                        <div>
-                                                            <h6 class="mb-0 text-sm">{{ $loop->index + 1 }}</h6>
-                                                            {{-- <p class="text-xs text-secondary mb-0">miriam@creative-tim.com</p> --}}
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                
-                                                <td>
-                                                    {{ $bijikopi->nama }}
-                                                    {{-- <p class="text-xs font-weight-bold mb-0"> {{ $kriteria->kriteria }}</p>
-                                                    <p class="text-xs text-secondary mb-0">Developer</p> --}}
-                                                </td>
-                                                <td class="align-middle text-center text-sm">
-                                                    <span class="badge badge-sm bg-gradient-secondary">{{ $bijikopi->harga }}</span>
-                                                </td>
-                                            
-                                                <td>
-                                                    <form method="POST" action="{{ route('biji-kopi.delete', $bijikopi->id) }}">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <a href="{{ route('biji-kopi.edit', $bijikopi->id) }}" class="btn btn-sm btn-warning btn-sm m-0">edit</a>
-                                                        <button class="btn btn-sm btn-danger btn-sm m-0" type="submit">
-                                                            delete
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
+                            <div>
+                                <h6>Data Biji Kopi</h6>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahDataModal">Tambah Data Biji Kopi</button>
+                            </div>  
+                    </div> 
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="datepicker">Filter Tanggal :</label>
+                                        <div class="input-group">
+                                            <input type="text" id="datepicker" class="form-control" placeholder="Pilih tanggal...">
+                                            <div class="">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="search">Filter Pencarian :</label>
+                                        <div class="input-group">
+                                            <input type="text" id="search" class="form-control" placeholder="Masukkan kata kunci...">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-search"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                          </div>
-                        
+                        </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive p-0">
+                
+                                <table id="bijikopi-table" class="table table-striped table-bordered text-center" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama</th>
+                                            <th>Harga</th>
+                                            <th>Waktu Pengisian Data</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Tambah Data Modal -->
-    <div class="modal fade" id="tambahDataModal" tabindex="-1" aria-labelledby="tambahDataModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="tambahDataModalLabel">Tambah Kriteria dan Bobot</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                <!-- Isi Form Tambah Data -->
-                <form class="modal-body mx-3" method="POST" action="{{route('store-biji-kopi')}}">
-                    @csrf
-                    <div class="md-form">
-                        <label for="nama">Nama</label>
-                        <input class="form-control" value="{{ old('nama') }}" type="text" name="nama" id="nama">
-                        @error('nama')
-                        <div>
-                            {{ $message }}
-                        </div>
-                        @enderror
-                    </div>
-                    <div class="md-form">
-                        <label for="harga">Harga</label>
-                        <input class="form-control" value="{{ old('harga') }}" type="number" name="harga" id="harga">
-                        @error('harga')
-                        <div>
-                            {{ $message }}
-                        </div>
-                        @enderror
-                    </div>
-                    @foreach ($kriterias as $kriteria)
-                        <h4 for=""> <b> {{ $kriteria->kriteria }} </b></h4>
-                            @foreach ($kriteria->subKriteria as $item)
-                                <div class="custom-control custom-radio mb-1">
-                                    <input class="custom-control-input" type="radio" id="{{ $item->id }}" name="{{ $kriteria->id }}" value="{{ $item->id }}" >
-                                    <label class="custom-control-label" for="{{ $item->id }}">{{ $item->sub_kriteria }}</label>
-                                </div>
-                            @endforeach
-                            <br>
-                    @endforeach
-    
-                    <div class="modal-footer d-flex justify-content-center">
-                        <button class="btn btn-brown" type="submit">Tambah Data Biji Kopi</button>
-                    </div>
-                </form>
-                </div>
-            </div>
-        </div>
-    </div>
+   
   
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.id.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#bijikopi').DataTable();
+            $('#datepicker').datepicker({
+                format: 'yyyy-mm-dd', // Format tanggal yang diinginkan
+                todayHighlight: true,
+                autoclose: true,
+                language: 'id' // Bahasa yang digunakan, dapat disesuaikan
+            });
+    
+            $('#bijikopi-table').DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ajax: {
+                    url: "{{ route('bijikopi.datatables') }}",
+                    data: function(d) {
+                        d.search.value = $('#search').val(); // Memasukkan nilai pencarian ke dalam data yang dikirim
+                        d.datepicker = $('#datepicker').val(); // Memasukkan tanggal pencarian ke dalam data yang dikirim
+                    }
+                },
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'nama', name: 'nama' },
+                    { data: 'harga', name: 'harga' },
+                    { data: 'created_at_formatted', name: 'created_at' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false }
+                ]
+            });
+    
+            // Memproses pencarian ketika nilai pencarian berubah
+            $('#search').keyup(function() {
+                $('#bijikopi-table').DataTable().draw();
+            });
+    
+            // Memproses pencarian ketika tanggal berubah
+            $('#datepicker').on('changeDate', function() {
+                $('#bijikopi-table').DataTable().draw();
+            });
         });
-
     </script>
+    
 @endsection

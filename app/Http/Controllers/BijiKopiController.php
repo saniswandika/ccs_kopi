@@ -7,7 +7,8 @@ use App\Models\Kriteria;
 use App\Models\Nilai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Carbon;
 class BijiKopiController extends Controller
 {
     public function __construct()
@@ -24,6 +25,37 @@ class BijiKopiController extends Controller
             'kriterias' => $kriterias
         ]);
     }
+    public function bijikopiDatatables(Request $request)
+    {
+        // Mengambil data dari request berupa tanggal
+        $tanggal = $request->input('datepicker');
+        // dd($tanggal);
+        // Query untuk data Biji Kopi
+        $bijiKopis = BijiKopi::select(['id', 'nama', 'harga', 'created_at']);
+    
+        // Jika ada tanggal yang dipilih, tambahkan kondisi where
+        if (!empty($tanggal)) {
+            $tanggal = Carbon::parse($tanggal)->toDateString(); // Mengubah format tanggal jika diperlukan
+            $bijiKopis->whereDate('created_at', $tanggal);
+        }
+    
+        // Menggunakan DataTables untuk memproses dan menghasilkan data
+        return DataTables::of($bijiKopis)
+            ->addColumn('action', function ($bijikopi) {
+                return '<form method="POST" action="' . route('biji-kopi.delete', $bijikopi->id) . '">' .
+                    csrf_field() .
+                    method_field('DELETE') .
+                    '<a href="' . route('biji-kopi.edit', $bijikopi->id) . '" class="btn btn-sm btn-warning">Edit</a>' .
+                    '<button type="submit" class="btn btn-sm btn-danger ml-1">Delete</button>' .
+                    '</form>';
+            })
+            ->addColumn('created_at_formatted', function ($bijikopi) {
+                return optional($bijikopi->created_at)->format('Y-m-d H:i:s');
+            })
+            ->rawColumns(['action'])
+            ->toJson();
+    }
+
 
     public function storeTambah(Request $request)
     {
@@ -63,9 +95,12 @@ class BijiKopiController extends Controller
     public function edit(BijiKopi $bijikopi, Request $request)
     {
         $kriterias = Kriteria::get();
-        $nilai = $bijikopi->nilai()->get();
+        // dd($kriteria);
 
-        return view('editbijikopi', [
+        $nilai = $bijikopi->nilai()->get();
+        // dd($nilai);
+
+        return view('bijikopi.edit', [
             'bijikopi' => $bijikopi,
             'kriterias' => $kriterias,
             'nilai' => $nilai,

@@ -72,9 +72,8 @@ use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;   
 use App\Http\Controllers\UsersController;  
 use App\Http\Controllers\KriteriaController;  
-use App\Http\Controllers\BijiKopiController;            
-
-            
+use App\Http\Controllers\BijiKopiController;
+use App\Http\Controllers\PerhitunganController;
 
 Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
 	Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
@@ -90,7 +89,7 @@ Route::get('/', function () {return redirect('/dashboard');})->middleware('auth'
     Route::get('/kriteria', [KriteriaController::class, 'index'])->name('kriteria')->middleware('auth');
     Route::post('/kriteria/tambah', [KriteriaController::class, 'storeTambah'])->name('store-kriteria')->middleware('auth');
     Route::get('/kriteria/{kriteria}', [KriteriaController::class, 'edit'])->name('kriteria.edit')->middleware('auth');
-    Route::put('/kriteria/{kriteria}', [KriteriaController::class, 'storeEdit'])->name('kriteria.edit.post')->middleware('auth');
+    Route::put('/kriteria/{kriteria}', [KriteriaController::class, 'storeEdit'])->name('kriteria.update')->middleware('auth');
     Route::delete('/kriteria/{kriteria}', [KriteriaController::class, 'destroy'])->name('kriteria.delete')->middleware('auth');
 
     Route::get('/biji-kopi', [BijiKopiController::class, 'index'])->name('biji-kopi')->middleware('auth');
@@ -98,7 +97,10 @@ Route::get('/', function () {return redirect('/dashboard');})->middleware('auth'
     Route::get('/biji-kopi/{bijikopi}', [BijiKopiController::class, 'edit'])->name('biji-kopi.edit')->middleware('auth');
     Route::put('/biji-kopi/{bijikopi}', [BijiKopiController::class, 'storeEdit'])->name('biji-kopi.edit.post')->middleware('auth');
     Route::delete('/biji-kopi/{bijikopi}', [BijiKopiController::class, 'destroy'])->name('biji-kopi.delete')->middleware('auth');
+    Route::get('/bijikopi/datatables', [BijiKopiController::class, 'bijikopiDatatables'])->name('bijikopi.datatables');
     
+    Route::get('/perhitungan', [PerhitunganController::class, 'index'])->name('perhitungan')->middleware('auth');
+
 
     Route::group(['middleware' => 'auth'], function () {    
         Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');

@@ -6,7 +6,7 @@ use App\Models\BijiKopi;
 use App\Models\Kriteria;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class PerhitunganController extends Controller
 {
         /**
      * Create a new controller instance.
@@ -85,7 +85,7 @@ class HomeController extends Controller
         // Inti-ideal adalah alternatif dengan skor minimal
         $intiIdeal = $bijiKopiCollection[count($bijiKopiCollection) - 1]['bijikopi'];
     
-        return view('pages.dashboard', [
+        return view('Perhitungan.index', [
             'bijikopis' => $bijikopis,
             'kriterias' => $kriterias,
             'numberOne' => $hasil,

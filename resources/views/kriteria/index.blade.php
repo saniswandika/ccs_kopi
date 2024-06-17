@@ -120,15 +120,14 @@
                                                     <span class="text-secondary text-xs font-weight-bold">  {{ $kriteria->bobot }}</span>
                                                 </td>
                                                 <td>
-                                                    <form method="POST" action="{{ route('kriteria.delete', $kriteria->id) }}">
+                                                    <form id="form-delete-{{ $kriteria->id }}" method="POST" action="{{ route('kriteria.delete', $kriteria->id) }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a href="{{ route('kriteria.edit', $kriteria->id) }}" class="btn btn-sm btn-warning btn-sm m-0">edit</a>
-                                                        <button class="btn btn-sm btn-danger btn-sm m-0" type="submit">
-                                                            delete
-                                                        </button>
+                                                        <a href="{{ route('kriteria.edit', $kriteria->id) }}" class="btn btn-sm btn-warning m-0">Edit</a>
+                                                        <button class="btn btn-sm btn-danger m-0" type="button" onclick="confirmDelete('{{ $kriteria->kriteria }}', '{{ $kriteria->id }}')">Delete</button>
                                                     </form>
                                                 </td>
+                                                
                                             </tr>
                                         @endforeach
                                         </tbody>
@@ -215,6 +214,15 @@
         });
 
     </script>
+    <script>
+        function confirmDelete(kriteria, kriteriaId) {
+            if (confirm(`Apakah Anda yakin ingin menghapus kriteria '${kriteria}'?`)) {
+                // Jika konfirmasi di-setujui, submit form delete
+                document.getElementById('form-delete-' + kriteriaId).submit();
+            }
+        }
+    </script>
+    
     <script type="text/javascript">
         var counter = 0;
             $("#add-kriteria").click(function () {
